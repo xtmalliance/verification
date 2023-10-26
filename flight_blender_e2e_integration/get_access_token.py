@@ -10,7 +10,7 @@ import argparse
 
 from typing import List
 
-from auth_helper.dummy_oauth_infrastructure.dummy_oauth import NoAuth
+from dummy_oauth_infrastructure.dummy_oauth import NoAuth
 
 
 def parse_args(argv: List[str]):
