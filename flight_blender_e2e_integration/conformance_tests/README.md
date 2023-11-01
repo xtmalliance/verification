@@ -12,4 +12,4 @@ The following flows are enabled in this directory to mimic interactions with GCS
 # Blender Conformance Monitoring 
 The image below shows how the internal mechanism of Flight Blender works in the context of conformance monitoring
 
-![Blender Conformance](../../images/flight-blender-conformance-monitoring.png)
+[Blender Conformance High level architecture](https://github.com/openutm/flight-blender/blob/master/images/flight-blender-conformance-monitoring.png)
