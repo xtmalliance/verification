@@ -12,7 +12,7 @@ from typing import List
 from dotenv import load_dotenv, find_dotenv
 from os import environ as env
 from common import get_redis
-from auth_helper.dummy_oauth_infrastructure.dummy_oauth import NoAuth
+from dummy_oauth_infrastructure.dummy_oauth import NoAuth
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
