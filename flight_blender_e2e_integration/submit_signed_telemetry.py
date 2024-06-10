@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives.serialization import (
 )
 import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError, InvalidTokenError, InvalidKeyError, DecodeError
-# This file send signed requests to Blender and verifies responses from Blendre
+# This file send signed requests to ArgonServer and verifies responses from Blendre
 # Source: https://github.com/pyauth/http-message-signatures/blob/main/test/test.py
 
 
@@ -25,7 +25,7 @@ class MyHTTPSignatureKeyResolver(HTTPSignatureKeyResolver):
     def __init__(self, jwk=None):
         self.jwk = jwk
     def resolve_public_key(self, key_id = None):   
-        # This Public key is not used in this script, this Public key must be converted to JWK format and uploaded to a server on the public internet. That URL must be added to Flight Blender via the Public Keys API (https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/openskies-sh/flight-blender/master/api/flight-blender-1.0.0-resolved.yaml#tag/message-signing-verification/paths/~1signing_public_key/get), Flight Blender downloads the public keys and verifies the signature.  
+        # This Public key is not used in this script, this Public key must be converted to JWK format and uploaded to a server on the public internet. That URL must be added to ArgonServer via the Public Keys API (https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/utmalliance/argon-server/master/api/flight-argon_server-1.0.0-resolved.yaml#tag/message-signing-verification/paths/~1signing_public_key/get), ArgonServer downloads the public keys and verifies the signature.  
         public_key = jwt.algorithms.RSAAlgorithm.from_jwk(self.jwk)
         return public_key
             
@@ -37,7 +37,7 @@ class MyHTTPSignatureKeyResolver(HTTPSignatureKeyResolver):
             with open(f"keys/{key_id}.key", "rb") as fh: 
                 return load_pem_private_key(fh.read(), password=None)
 
-class BlenderUploader():    
+class ArgonServerUploader():    
     def upload_to_server(self, filename):
         # Create a session that is re-used
         s = requests.Session()
@@ -85,21 +85,21 @@ class BlenderUploader():
                 
                 
             except Exception as e:                
-                print("Error in signing message to be sent to Blender {signing_error}".format(signing_error = e))
+                print("Error in signing message to be sent to ArgonServer {signing_error}".format(signing_error = e))
                 break
             else:
                 #TODO: Verify signed responses
-                # Get Blender public key
-                blender_response = response.json()
-                print(blender_response)
-                blender_public_key_req = requests.get(url='http://localhost:8000/signing_public_key', headers= headers)
-                blender_public_key_jwks = blender_public_key_req.json()
-                key_resolver  = MyHTTPSignatureKeyResolver(jwk= blender_public_key_jwks['keys'][0])
+                # Get ArgonServer public key
+                argon_server_response = response.json()
+                print(argon_server_response)
+                argon_server_public_key_req = requests.get(url='http://localhost:8000/signing_public_key', headers= headers)
+                argon_server_public_key_jwks = argon_server_public_key_req.json()
+                key_resolver  = MyHTTPSignatureKeyResolver(jwk= argon_server_public_key_jwks['keys'][0])
                 public_key = key_resolver.resolve_public_key()
                 try: 
-                    decoded_data = jwt.decode(blender_response['signed']['signature'], key=public_key, algorithms='RS256')
+                    decoded_data = jwt.decode(argon_server_response['signed']['signature'], key=public_key, algorithms='RS256')
                 except (ExpiredSignatureError, InvalidSignatureError, InvalidTokenError, InvalidKeyError, DecodeError) as decode_error:
-                    print("Error in verifying signed response from Blender or it is not JWT, please check Flight Blender setttings")
+                    print("Error in verifying signed response from ArgonServer or it is not JWT, please check ArgonServer setttings")
 
                 if response.status_code == 201:
                     print("Sleeping 3 seconds..")
@@ -114,5 +114,5 @@ if __name__ == '__main__':
     
     rel_path = "rid_samples/flight_1_rid_aircraft_state.json"
     abs_file_path = os.path.join(parent_dir, rel_path)
-    my_uploader = BlenderUploader()
+    my_uploader = ArgonServerUploader()
     my_uploader.upload_to_server(filename=abs_file_path)
