@@ -102,7 +102,7 @@ class NoAuth(AuthAdapter):
 
     # Overrides method in AuthAdapter
     def issue_token(self, intended_audience: str, scopes: List[str]) -> str:
-        timestamp = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        timestamp = int((datetime.datetime.now(datetime.UTC) - EPOCH).total_seconds())
         jwt = jwcrypto.jwt.JWT(
             header={"typ": "JWT", "alg": "RS256"},
             claims={
