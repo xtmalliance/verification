@@ -19,7 +19,7 @@ ALL_SCOPES = [
     "utm.constraint_consumption",
 ]
 
-EPOCH = datetime.datetime.utcfromtimestamp(0)
+EPOCH = datetime.datetime.fromtimestamp(0, tz = datetime.timezone.utc)
 TOKEN_REFRESH_MARGIN = datetime.timedelta(seconds=15)
 CLIENT_TIMEOUT = 60  # seconds
 
@@ -102,7 +102,7 @@ class NoAuth(AuthAdapter):
 
     # Overrides method in AuthAdapter
     def issue_token(self, intended_audience: str, scopes: List[str]) -> str:
-        timestamp = int((datetime.datetime.now(datetime.UTC) - EPOCH).total_seconds())
+        timestamp = int((datetime.datetime.now(datetime.timezone.utc) - EPOCH).total_seconds())
         jwt = jwcrypto.jwt.JWT(
             header={"typ": "JWT", "alg": "RS256"},
             claims={
