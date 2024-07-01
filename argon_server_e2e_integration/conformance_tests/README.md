@@ -12,4 +12,4 @@ The following flows are enabled in this directory to mimic interactions with GCS
 # Argon Server Conformance Monitoring 
 The image below shows how the internal mechanism of Argon Server works in the context of conformance monitoring
 
-[Argon Server Conformance High level architecture](https://github.com/xtmalliance/argon-server/blob/master/images/argon-server-conformance-monitoring.png)
+[Argon Server Conformance High level architecture](https://github.com/xtmalliance/argon-server/blob/master/images/argonserver-conformance-monitoring.png)
