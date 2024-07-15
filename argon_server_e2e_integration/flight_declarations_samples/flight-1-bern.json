@@ -1,5 +1,6 @@
 {
     "exchange_type": "flight_declaration",
+    "aircraft_id": "a5dd8899-bc19-c8c4-2dd7-57f786d1379d",
     "flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
     "plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
     "flight_state": 2,
